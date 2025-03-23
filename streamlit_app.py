@@ -1,6 +1,8 @@
 import streamlit as st
 from openai import OpenAI
 import os
+st.image("assistant_icon.png", caption="Test assistant icon", width=50)
+st.image("user_icon.png", caption="Test user icon", width=50)
 
 # Hàm đọc nội dung từ file văn bản
 def rfile(name_file):
