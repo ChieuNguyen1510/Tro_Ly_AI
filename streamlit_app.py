@@ -24,57 +24,88 @@ st.markdown(
 
 # Lấy OpenAI API key từ st.secrets
 openai_api_key = st.secrets.get("OPENAI_API_KEY")
-
-# Khởi tạo OpenAI client
 client = OpenAI(api_key=openai_api_key)
 
-# Khởi tạo tin nhắn "system" và "assistant"
+# Tin nhắn khởi tạo
 INITIAL_SYSTEM_MESSAGE = {"role": "system", "content": rfile("01.system_trainning.txt")}
 INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant.txt")}
 
-# Kiểm tra nếu chưa có session lưu trữ thì khởi tạo tin nhắn ban đầu
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
-# CSS để căn chỉnh trợ lý bên trái, người hỏi bên phải, và thêm icon trợ lý
+# CSS
 st.markdown(
     """
     <style>
-        .assistant {
+        .message {
             padding: 10px;
             border-radius: 10px;
             max-width: 75%;
-            background: none; /* Màu trong suốt */
-            text-align: left;
+            background: none;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
         }
         .user {
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 75%;
-            background: none; /* Màu trong suốt */
             text-align: right;
             margin-left: auto;
+            flex-direction: row-reverse;
         }
-        .assistant::before { content: "🤖 "; font-weight: bold; }
+        .icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+        }
+        .text {
+            flex: 1;
+        }
+        .typing {
+            font-style: italic;
+            color: gray;
+            padding: 5px 10px;
+        }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Hiển thị lịch sử tin nhắn (loại bỏ system để tránh hiển thị)
+# Hiển thị lịch sử tin nhắn (trừ system)
 for message in st.session_state.messages:
     if message["role"] == "assistant":
-        st.markdown(f'<div class="assistant">{message["content"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div class="message">
+            <img src="assistant_icon.png" class="icon" />
+            <div class="text">{message["content"]}</div>
+        </div>
+        ''', unsafe_allow_html=True)
     elif message["role"] == "user":
-        st.markdown(f'<div class="user">{message["content"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div class="message user">
+            <img src="user_icon.png" class="icon" />
+            <div class="text">{message["content"]}</div>
+        </div>
+        ''', unsafe_allow_html=True)
 
-# Ô nhập liệu cho người dùng
-if prompt := st.chat_input("Bạn nhập nội dung cần trao đổi ở đây nhé?"):
-    # Lưu tin nhắn người dùng vào session
+# Nhập prompt
+if prompt := st.chat_input("Please enter your questions here"):
     st.session_state.messages.append({"role": "user", "content": prompt})
-    st.markdown(f'<div class="user">{prompt}</div>', unsafe_allow_html=True)
 
-    # Tạo phản hồi từ API OpenAI
+    # Hiển thị user message
+    st.markdown(f'''
+    <div class="message user">
+        <img src="user_icon.png" class="icon" />
+        <div class="text">{prompt}</div>
+    </div>
+    ''', unsafe_allow_html=True)
+
+    # Hiển thị "Assistant is typing..."
+    typing_placeholder = st.empty()
+    typing_placeholder.markdown(
+        '<div class="typing">Assistant is typing...</div>',
+        unsafe_allow_html=True
+    )
+
+    # Gọi OpenAI API với streaming
     response = ""
     stream = client.chat.completions.create(
         model=rfile("module_chatgpt.txt").strip(),
@@ -82,13 +113,20 @@ if prompt := st.chat_input("Bạn nhập nội dung cần trao đổi ở đây 
         stream=True,
     )
 
-    # Ghi lại phản hồi của trợ lý vào biến
     for chunk in stream:
         if chunk.choices:
             response += chunk.choices[0].delta.content or ""
 
-    # Hiển thị phản hồi của trợ lý
-    st.markdown(f'<div class="assistant">{response}</div>', unsafe_allow_html=True)
+    # Xóa "typing..."
+    typing_placeholder.empty()
 
-    # Cập nhật lịch sử tin nhắn trong session
+    # Hiển thị assistant message
+    st.markdown(f'''
+    <div class="message">
+        <img src="assistant_icon.png" class="icon" />
+        <div class="text">{response}</div>
+    </div>
+    ''', unsafe_allow_html=True)
+
+    # Lưu lại
     st.session_state.messages.append({"role": "assistant", "content": response})
