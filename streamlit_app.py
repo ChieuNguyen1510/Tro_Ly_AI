@@ -1,13 +1,20 @@
 import streamlit as st
 from openai import OpenAI
-import os
-st.image("assistant_icon.png", caption="Test assistant icon", width=50)
-st.image("user_icon.png", caption="Test user icon", width=50)
+from base64 import b64encode
 
 # Hàm đọc nội dung từ file văn bản
 def rfile(name_file):
     with open(name_file, "r", encoding="utf-8") as file:
         return file.read()
+
+# Hàm chuyển ảnh thành base64
+def img_to_base64(img_path):
+    with open(img_path, "rb") as f:
+        return b64encode(f.read()).decode()
+
+# Chuyển ảnh sang base64
+assistant_icon = img_to_base64("assistant_icon.png")
+user_icon = img_to_base64("user_icon.png")
 
 # Hiển thị logo (nếu có)
 try:
@@ -24,11 +31,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Lấy OpenAI API key từ st.secrets
+# OpenAI API
 openai_api_key = st.secrets.get("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
 
-# Tin nhắn khởi tạo
+# Tin nhắn hệ thống
 INITIAL_SYSTEM_MESSAGE = {"role": "system", "content": rfile("01.system_trainning.txt")}
 INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant.txt")}
 
@@ -76,38 +83,37 @@ for message in st.session_state.messages:
     if message["role"] == "assistant":
         st.markdown(f'''
         <div class="message">
-            <img src="assistant_icon.png" class="icon" />
+            <img src="data:image/png;base64,{assistant_icon}" class="icon" />
             <div class="text">{message["content"]}</div>
         </div>
         ''', unsafe_allow_html=True)
     elif message["role"] == "user":
         st.markdown(f'''
         <div class="message user">
-            <img src="user_icon.png" class="icon" />
+            <img src="data:image/png;base64,{user_icon}" class="icon" />
             <div class="text">{message["content"]}</div>
         </div>
         ''', unsafe_allow_html=True)
 
-# Nhập prompt
-if prompt := st.chat_input("Please enter your questions hereeeeeeeeeeeeee"):
+# Ô nhập câu hỏi
+if prompt := st.chat_input("Please enter your questions here"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    # Hiển thị user message
     st.markdown(f'''
     <div class="message user">
-        <img src="user_icon.png" class="icon" />
+        <img src="data:image/png;base64,{user_icon}" class="icon" />
         <div class="text">{prompt}</div>
     </div>
     ''', unsafe_allow_html=True)
 
-    # Hiển thị "Assistant is typing..."
+    # Assistant đang trả lời...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
         '<div class="typing">Assistant is typing...</div>',
         unsafe_allow_html=True
     )
 
-    # Gọi OpenAI API với streaming
+    # Gọi API
     response = ""
     stream = client.chat.completions.create(
         model=rfile("module_chatgpt.txt").strip(),
@@ -119,16 +125,15 @@ if prompt := st.chat_input("Please enter your questions hereeeeeeeeeeeeee"):
         if chunk.choices:
             response += chunk.choices[0].delta.content or ""
 
-    # Xóa "typing..."
+    # Xóa dòng "Assistant is typing..."
     typing_placeholder.empty()
 
-    # Hiển thị assistant message
+    # Hiển thị phản hồi từ assistant
     st.markdown(f'''
     <div class="message">
-        <img src="assistant_icon.png" class="icon" />
+        <img src="data:image/png;base64,{assistant_icon}" class="icon" />
         <div class="text">{response}</div>
     </div>
     ''', unsafe_allow_html=True)
 
-    # Lưu lại
     st.session_state.messages.append({"role": "assistant", "content": response})
