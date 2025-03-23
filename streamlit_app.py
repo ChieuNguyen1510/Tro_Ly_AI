@@ -87,7 +87,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Nhập prompt
-if prompt := st.chat_input("Please enter your questions here"):
+if prompt := st.chat_input("Please enter your questions hereeeeeeeeeeeeee"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     # Hiển thị user message
