@@ -2,21 +2,21 @@ import streamlit as st
 from openai import OpenAI
 from base64 import b64encode
 
-# Hàm đọc nội dung từ file văn bản
+# Hàm đọc file văn bản
 def rfile(name_file):
     with open(name_file, "r", encoding="utf-8") as file:
         return file.read()
 
-# Hàm chuyển ảnh thành base64
+# Chuyển ảnh sang base64
 def img_to_base64(img_path):
     with open(img_path, "rb") as f:
         return b64encode(f.read()).decode()
 
-# Hàm tự động sửa công thức dạng [ \ ... ] thành $ ... $
+# Tự động sửa công thức từ [ \ ... ] → $ ... $
 def fix_latex(text):
     return text.replace("[", "$").replace("]", "$")
 
-# Chuyển icon sang base64
+# Chuyển icon
 assistant_icon = img_to_base64("assistant_icon.png")
 user_icon = img_to_base64("user_icon.png")
 
@@ -35,7 +35,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Lấy OpenAI API key
+# OpenAI
 openai_api_key = st.secrets.get("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
 
@@ -46,29 +46,10 @@ INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
-# CSS
+# CSS typing
 st.markdown(
     """
     <style>
-        .message {
-            padding: 10px;
-            border-radius: 10px;
-            max-width: 75%;
-            background: none;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .user {
-            text-align: right;
-            margin-left: auto;
-            flex-direction: row-reverse;
-        }
-        .icon {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-        }
         .typing {
             font-style: italic;
             color: gray;
@@ -79,43 +60,41 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Hiển thị lịch sử tin nhắn (trừ system)
+# Hiển thị lịch sử trò chuyện
 for message in st.session_state.messages:
     content_fixed = fix_latex(message["content"])
     if message["role"] == "assistant":
-        st.markdown(f'''
-        <div class="message">
-            <img src="data:image/png;base64,{assistant_icon}" class="icon" />
-        </div>
-        ''', unsafe_allow_html=True)
-        st.markdown(content_fixed, unsafe_allow_html=False)
+        col1, col2 = st.columns([1, 8])
+        with col1:
+            st.image(f"data:image/png;base64,{assistant_icon}", width=28)
+        with col2:
+            st.markdown(content_fixed, unsafe_allow_html=False)
     elif message["role"] == "user":
-        st.markdown(f'''
-        <div class="message user">
-            <img src="data:image/png;base64,{user_icon}" class="icon" />
-        </div>
-        ''', unsafe_allow_html=True)
-        st.markdown(content_fixed, unsafe_allow_html=False)
+        col1, col2 = st.columns([8, 1])
+        with col1:
+            st.markdown(f"<div style='text-align: right'>{fix_latex(message['content'])}</div>", unsafe_allow_html=True)
+        with col2:
+            st.image(f"data:image/png;base64,{user_icon}", width=28)
 
-# Nhập prompt
+# Người dùng nhập câu hỏi
 if prompt := st.chat_input("Please enter your questions here"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    st.markdown(f'''
-    <div class="message user">
-        <img src="data:image/png;base64,{user_icon}" class="icon" />
-    </div>
-    ''', unsafe_allow_html=True)
-    st.markdown(fix_latex(prompt), unsafe_allow_html=False)
+    # Hiển thị user input
+    col1, col2 = st.columns([8, 1])
+    with col1:
+        st.markdown(f"<div style='text-align: right'>{fix_latex(prompt)}</div>", unsafe_allow_html=True)
+    with col2:
+        st.image(f"data:image/png;base64,{user_icon}", width=28)
 
-    # Hiển thị typing...
+    # Assistant is typing...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
         '<div class="typing">Assistant is typing...</div>',
         unsafe_allow_html=True
     )
 
-    # Gọi API
+    # Gọi API OpenAI
     response = ""
     stream = client.chat.completions.create(
         model=rfile("module_chatgpt.txt").strip(),
@@ -129,12 +108,11 @@ if prompt := st.chat_input("Please enter your questions here"):
 
     typing_placeholder.empty()
 
-    # Hiển thị icon + nội dung trả lời
-    st.markdown(f'''
-    <div class="message">
-        <img src="data:image/png;base64,{assistant_icon}" class="icon" />
-    </div>
-    ''', unsafe_allow_html=True)
-    st.markdown(fix_latex(response), unsafe_allow_html=False)
+    # Hiển thị kết quả assistant
+    col1, col2 = st.columns([1, 8])
+    with col1:
+        st.image(f"data:image/png;base64,{assistant_icon}", width=28)
+    with col2:
+        st.markdown(fix_latex(response), unsafe_allow_html=False)
 
     st.session_state.messages.append({"role": "assistant", "content": response})
