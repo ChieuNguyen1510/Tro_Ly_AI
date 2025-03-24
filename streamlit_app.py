@@ -19,6 +19,19 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# Ẩn nút "Manage app"
+st.markdown(
+    """
+    <style>
+        /* Ẩn nút Manage app */
+        [data-testid="manage-app-button"] {
+            display: none !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Hàm đọc nội dung từ file văn bản
 def rfile(name_file):
     with open(name_file, "r", encoding="utf-8") as file:
