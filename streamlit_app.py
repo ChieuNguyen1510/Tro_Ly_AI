@@ -2,6 +2,23 @@ import streamlit as st
 from openai import OpenAI
 from base64 import b64encode
 
+
+# Thêm CSS để ẩn các nút trên thanh công cụ
+st.markdown(
+    """
+    <style>
+        /* Ẩn toàn bộ thanh công cụ chứa các nút Share, Star, Edit, GitHub */
+        [data-testid="stToolbar"] {
+            display: none !important;
+        }
+        /* Ẩn nút ba chấm (menu) */
+        [data-testid="stAppViewBlockContainer"] > div > div > div > div > div {
+            display: none !important;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 # Hàm đọc nội dung từ file văn bản
 def rfile(name_file):
     with open(name_file, "r", encoding="utf-8") as file:
