@@ -2,28 +2,17 @@ import streamlit as st
 from openai import OpenAI
 from base64 import b64encode
 
-
-# Thêm CSS để ẩn các nút trên thanh công cụ
+# Ẩn thanh công cụ và nút "Manage app"
 st.markdown(
     """
     <style>
-        /* Ẩn toàn bộ thanh công cụ chứa các nút Share, Star, Edit, GitHub */
+        /* Ẩn các nút Share, Star, Edit, GitHub */
         [data-testid="stToolbar"] {
             display: none !important;
         }
-        /* Ẩn nút ba chấm (menu) */
         [data-testid="stAppViewBlockContainer"] > div > div > div > div > div {
             display: none !important;
         }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Ẩn nút "Manage app"
-st.markdown(
-    """
-    <style>
         /* Ẩn nút Manage app */
         [data-testid="manage-app-button"] {
             display: none !important;
@@ -49,7 +38,7 @@ user_icon = img_to_base64("user_icon.png")
 
 # Hiển thị logo (nếu có)
 try:
-    col1, col2, col3 = st.columns([3, 2, 3])
+    col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.image("logo.png", use_container_width=True)
 except:
@@ -70,14 +59,21 @@ client = OpenAI(api_key=openai_api_key)
 INITIAL_SYSTEM_MESSAGE = {"role": "system", "content": rfile("01.system_trainning.txt")}
 INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant.txt")}
 
+# Khởi tạo session_state.messages nếu chưa có
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
+
+# Nút "Bắt đầu cuộc trò chuyện mới"
+if st.button("Bắt đầu cuộc trò chuyện mới"):
+    # Reset messages về trạng thái ban đầu
+    st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
+    # Làm mới giao diện bằng cách rerun ứng dụng
+    st.rerun()
 
 # CSS cải tiến
 st.markdown(
     """
     <style>
-        /* Đảm bảo áp dụng cho toàn bộ ứng dụng */
         .message {
             padding: 12px !important;
             border-radius: 12px !important;
@@ -89,10 +85,10 @@ st.markdown(
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
         .assistant {
-            background-color: #f0f7ff !important;  /* Màu xanh nhạt cho assistant */
+            background-color: #f0f7ff !important;
         }
         .user {
-            background-color: #e6ffe6 !important;  /* Màu xanh lá nhạt cho user */
+            background-color: #e6ffe6 !important;
             text-align: right !important;
             margin-left: auto !important;
             flex-direction: row-reverse !important;
@@ -130,6 +126,20 @@ st.markdown(
             padding: 8px !important;
             background-color: #fafafa !important;
         }
+        /* Tùy chỉnh nút "Bắt đầu cuộc trò chuyện mới" */
+        div.stButton > button {
+            background-color: #4CAF50 !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+            font-size: 14px !important;
+            border: none !important;
+            display: block !important;
+            margin: 10px auto !important;  /* Căn giữa nút */
+        }
+        div.stButton > button:hover {
+            background-color: #45a049 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True
@@ -153,7 +163,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Enter your question here........"):
+if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
@@ -166,7 +176,7 @@ if prompt := st.chat_input("Enter your question here........"):
     # Assistant đang trả lời...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
-        '<div class="typing">Assistant is typing...</div>',
+        '<div class="typing">Assistant đang trả lời</div>',
         unsafe_allow_html=True
     )
 
