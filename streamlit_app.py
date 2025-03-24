@@ -18,16 +18,16 @@ user_icon = img_to_base64("user_icon.png")
 
 # Hiển thị logo (nếu có)
 try:
-    col1, col2, col3 = st.columns([3, 2, 3])
+    col1, col2, col3 = st.columns([1, 2, 1])  # Điều chỉnh tỷ lệ để logo căn giữa đẹp hơn
     with col2:
         st.image("logo.png", use_container_width=True)
 except:
     pass
 
-# Hiển thị tiêu đề
+# Hiển thị tiêu đề với viền dưới
 title_content = rfile("00.xinchao.txt")
 st.markdown(
-    f"""<h1 style="text-align: center; font-size: 24px;">{title_content}</h1>""",
+    f"""<h1 style="text-align: center; font-size: 24px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">{title_content}</h1>""",
     unsafe_allow_html=True
 )
 
@@ -42,36 +42,63 @@ INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
-# CSS
+# CSS cải tiến
 st.markdown(
     """
     <style>
         .message {
-            padding: 10px;
-            border-radius: 10px;
+            padding: 12px;
+            border-radius: 12px;
             max-width: 75%;
-            background: none;
             display: flex;
             align-items: flex-start;
-            gap: 10px;
+            gap: 12px;
+            margin: 8px 0;  /* Thêm khoảng cách giữa các tin nhắn */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Thêm bóng đổ */
+        }
+        .assistant {
+            background-color: #f0f7ff;  /* Màu nền nhạt cho assistant */
         }
         .user {
+            background-color: #e6ffe6;  /* Màu nền nhạt cho user */
             text-align: right;
             margin-left: auto;
             flex-direction: row-reverse;
         }
         .icon {
-            width: 28px;
-            height: 28px;
+            width: 32px;  /* Tăng kích thước icon một chút */
+            height: 32px;
             border-radius: 50%;
+            border: 1px solid #ddd;  /* Thêm viền nhẹ cho icon */
         }
         .text {
             flex: 1;
+            font-size: 16px;  /* Tăng cỡ chữ cho dễ đọc */
+            line-height: 1.4;  /* Tăng khoảng cách dòng */
         }
         .typing {
             font-style: italic;
-            color: gray;
+            color: #888;
             padding: 5px 10px;
+            display: flex;
+            align-items: center;
+        }
+        /* Hiệu ứng nhấp nháy cho "Assistant is typing..." */
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .typing::after {
+            content: "...";
+            animation: blink 1s infinite;
+        }
+        /* Tùy chỉnh ô nhập liệu */
+        [data-testid="stChatInput"] {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            background-color: #fafafa;
         }
     </style>
     """,
@@ -82,7 +109,7 @@ st.markdown(
 for message in st.session_state.messages:
     if message["role"] == "assistant":
         st.markdown(f'''
-        <div class="message">
+        <div class="message assistant">
             <img src="data:image/png;base64,{assistant_icon}" class="icon" />
             <div class="text">{message["content"]}</div>
         </div>
@@ -96,7 +123,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Please enter your questions here"):
+if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):  # Thêm placeholder tùy chỉnh
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
@@ -109,7 +136,7 @@ if prompt := st.chat_input("Please enter your questions here"):
     # Assistant đang trả lời...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
-        '<div class="typing">Assistant is typing...</div>',
+        '<div class="typing">Assistant đang trả lời</div>',
         unsafe_allow_html=True
     )
 
@@ -130,7 +157,7 @@ if prompt := st.chat_input("Please enter your questions here"):
 
     # Hiển thị phản hồi từ assistant
     st.markdown(f'''
-    <div class="message">
+    <div class="message assistant">
         <img src="data:image/png;base64,{assistant_icon}" class="icon" />
         <div class="text">{response}</div>
     </div>
