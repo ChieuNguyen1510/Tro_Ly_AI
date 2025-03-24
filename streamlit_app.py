@@ -32,6 +32,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 # Hàm đọc nội dung từ file văn bản
 def rfile(name_file):
     with open(name_file, "r", encoding="utf-8") as file:
@@ -152,7 +153,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Enter your question here..."):
+if prompt := st.chat_input("Enter your question here........"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
