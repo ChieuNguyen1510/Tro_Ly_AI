@@ -104,3 +104,144 @@ Tôi là Cody, tôi đến từ Team 7 của KTP. Tôi là 1 kỹ sư xây dựn
 
 Nếu bạn gặp đường link web, hãy lấy thông tin trong web đó để trả lời câu hỏi nhé:
 link web1: https://ketcausoft.com/thuvien/khai-niem
+
+
+
+Overview of the Automation Orientation off Team 7 at KTP
+Table of Contents
+I. Overview of the Automation Orientation
+ 1. Developing a Shared Python Library on GitHub
+ 2. Continuing the Deployment of Automation Applications – App Development Orientation
+ 3. Research & Development for the Future
+II. Conclusion
+
+Objective:
+Create a well-structured, easy-to-use programming toolkit (code library) for all engineers.
+
+Increase code reusability and reduce time spent rewriting code from scratch.
+
+Ensure stability, easy maintenance, and continuous updates.
+
+Implementation Plan:
+
+Build a standardized structure for the library: organized by modules and functions.
+
+Define standards for writing docstrings and usage examples so that anyone can read, understand, and reuse the code.
+
+Provide simple installation instructions (e.g., via pip install or folder cloning).
+
+Include commonly used functions: reading data from ETABS, assigning data to ETABS (Load, Combination, Load Set, etc.), processing input data, plotting charts, exporting files, etc.
+
+Facilitate knowledge and code sharing among engineers.
+
+1. Developing a Shared Python Library on GitHub
+With the existing library, building an app will save a lot of time.
+
+All engineers can use it collectively.
+
+It also makes updates and corrections easier in case of any errors.
+
+Key Features:
+
+Reusability: All employees can reuse the source code whenever needed.
+
+Easy to Install: Just one command to set it up.
+
+Ready to Use:
+ • Includes commonly used functions
+ • Reduces repetitive coding time
+ • Makes it easier to share knowledge and source code among engineers
+
+Example: Creating a column element in ETABS becomes effortless with just one predefined command from the library.
+
+Status: The library is already in use across existing applications and is continuously maintained and updated.
+
+2. Continuing the Deployment of Automation Applications – App Development Orientation
+Objective:
+Aim to build a fully automated workflow:
+→ Process inputs (Excel, PDF, etc.)
+→ Calculations (using internal libraries, developing calculation apps, lookup tools to support engineering work)
+→ Interact seamlessly with analysis models (e.g., CSI ETABS, SAP2000 via API)
+→ Generate reports automatically (export Word, Excel, or PDF reports)
+
+Ideas:
+See details on the next page.
+
+In Addition:
+Deploy tools to support repetitive daily engineering tasks.
+→ More ideas are needed for this section.
+
+Benefits:
+
+Shorten project execution time
+
+Minimize human errors caused by manual operations
+
+Increase consistency among engineers
+
+Workflow Steps:
+
+Standardizing Input Data
+
+Performing Calculations
+
+Integrating Data into the Model
+
+Automatically Generating Reports
+
+Apps Developed and In Progress
+INTERACTION PMM
+ - Demo: PMM Description.pptx + Video_PMM.mp4
+
+BEAM AUTOMATION
+ - Demo: 20250228_BeamAutomation.mp4
+
+CSI AUTOMATION
+ - Extract data from ETABS
+ - Add/edit data directly from interface
+ - Update ETABS model accordingly
+
+CHECK CORENET-X
+ - Blue color: beams not in ST Submission
+ - Red color: value mismatch with Corenet-X file
+
+PDF FILE NAME
+ - Supports renaming all files as desired
+
+3. Research & Development for the Future
+Personalized AI for Engineering
+
+Develop a dedicated AI assistant for the company
+
+Capabilities:
+ • Understand technical terminology
+ • Learn from internal libraries, project documents, and company standards
+ • Support on-the-job training for new engineers
+
+AI Project – Team 7
+
+An initial version has been developed
+
+Still in early stages; further R&D is planned
+
+Built on the same database as ChatGPT
+
+Will be trained with internal company data
+
+Try it here: https://team7-ai.streamlit.app
+
+II. Conclusion
+A Workflow to Ensure Consistency and Knowledge Continuity
+
+Automate the entire process: Apply automation to all steps to ensure continuity and consistency.
+
+Standardize UI and color scheme: Define a UI guideline (colors, fonts, layouts…) for easy reuse.
+
+Unify naming conventions and code structure: Consistent rules for file/variable/function names and folder organization.
+
+Comprehensive documentation for each project (App):
+ • Workflow Flowchart
+ • Source Code
+ • User Interface Design
+ • User Guide
+Goal: Ensure successors can quickly understand and further develop the project if needed.
