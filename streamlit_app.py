@@ -183,4 +183,53 @@ for message in st.session_state.messages:
             <div class="text">{message["content"]}</div>
         </div>
         ''', unsafe_allow_html=True)
-    elif
+    elif message["role"] == "user":
+        st.markdown(f'''
+        <div class="message user">
+            <img src="data:image/png;base64,{user_icon}" class="icon" />
+            <div class="text">{message["content"]}</div>
+        </div>
+        ''', unsafe_allow_html=True)
+
+# Ô nhập câu hỏi
+if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+
+    st.markdown(f'''
+    <div class="message user">
+        <img src="data:image/png;base64,{user_icon}" class="icon" />
+        <div class="text">{prompt}</div>
+    </div>
+    ''', unsafe_allow_html=True)
+
+    # Assistant đang trả lời...
+    typing_placeholder = st.empty()
+    typing_placeholder.markdown(
+        '<div class="typing">Assistant đang trả lời</div>',
+        unsafe_allow_html=True
+    )
+
+    # Gọi API
+    response = ""
+    stream = client.chat.completions.create(
+        model=rfile("module_chatgpt.txt").strip(),
+        messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages],
+        stream=True,
+    )
+
+    for chunk in stream:
+        if chunk.choices:
+            response += chunk.choices[0].delta.content or ""
+
+    # Xóa dòng "Assistant is typing..."
+    typing_placeholder.empty()
+
+    # Hiển thị phản hồi từ assistant
+    st.markdown(f'''
+    <div class="message assistant">
+        <img src="data:image/png;base64,{assistant_icon}" class="icon" />
+        <div class="text">{response}</div>
+    </div>
+    ''', unsafe_allow_html=True)
+
+    st.session_state.messages.append({"role": "assistant", "content": response})
