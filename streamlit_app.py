@@ -186,7 +186,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Enter your question here..."):
+if prompt := st.chat_input("Enter your question here...."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
