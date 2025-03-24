@@ -64,7 +64,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
 # Nút "Bắt đầu cuộc trò chuyện mới"
-if st.button("Bắt đầu cuộc trò chuyện mới"):
+if st.button("New chat"):
     # Reset messages về trạng thái ban đầu
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
     # Làm mới giao diện bằng cách rerun ứng dụng
