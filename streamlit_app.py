@@ -18,7 +18,7 @@ user_icon = img_to_base64("user_icon.png")
 
 # Hiển thị logo (nếu có)
 try:
-    col1, col2, col3 = st.columns([1, 2, 1])
+    col1, col2, col3 = st.columns([3, 2, 3])
     with col2:
         st.image("logo.png", use_container_width=True)
 except:
@@ -122,7 +122,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
+if prompt := st.chat_input("Enter your question here..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
@@ -135,7 +135,7 @@ if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
     # Assistant đang trả lời...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
-        '<div class="typing">Assistant đang trả lời</div>',
+        '<div class="typing">Assistant is typing...</div>',
         unsafe_allow_html=True
     )
 
