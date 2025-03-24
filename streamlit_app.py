@@ -18,13 +18,13 @@ user_icon = img_to_base64("user_icon.png")
 
 # Hiển thị logo (nếu có)
 try:
-    col1, col2, col3 = st.columns([1, 2, 1])  # Điều chỉnh tỷ lệ để logo căn giữa đẹp hơn
+    col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         st.image("logo.png", use_container_width=True)
 except:
     pass
 
-# Hiển thị tiêu đề với viền dưới
+# Hiển thị tiêu đề
 title_content = rfile("00.xinchao.txt")
 st.markdown(
     f"""<h1 style="text-align: center; font-size: 24px; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">{title_content}</h1>""",
@@ -46,59 +46,58 @@ if "messages" not in st.session_state:
 st.markdown(
     """
     <style>
+        /* Đảm bảo áp dụng cho toàn bộ ứng dụng */
         .message {
-            padding: 12px;
-            border-radius: 12px;
-            max-width: 75%;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin: 8px 0;  /* Thêm khoảng cách giữa các tin nhắn */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* Thêm bóng đổ */
+            padding: 12px !important;
+            border-radius: 12px !important;
+            max-width: 75% !important;
+            display: flex !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+            margin: 8px 0 !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
         }
         .assistant {
-            background-color: #f0f7ff;  /* Màu nền nhạt cho assistant */
+            background-color: #f0f7ff !important;  /* Màu xanh nhạt cho assistant */
         }
         .user {
-            background-color: #e6ffe6;  /* Màu nền nhạt cho user */
-            text-align: right;
-            margin-left: auto;
-            flex-direction: row-reverse;
+            background-color: #e6ffe6 !important;  /* Màu xanh lá nhạt cho user */
+            text-align: right !important;
+            margin-left: auto !important;
+            flex-direction: row-reverse !important;
         }
         .icon {
-            width: 32px;  /* Tăng kích thước icon một chút */
-            height: 32px;
-            border-radius: 50%;
-            border: 1px solid #ddd;  /* Thêm viền nhẹ cho icon */
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            border: 1px solid #ddd !important;
         }
         .text {
-            flex: 1;
-            font-size: 16px;  /* Tăng cỡ chữ cho dễ đọc */
-            line-height: 1.4;  /* Tăng khoảng cách dòng */
+            flex: 1 !important;
+            font-size: 16px !important;
+            line-height: 1.4 !important;
         }
         .typing {
-            font-style: italic;
-            color: #888;
-            padding: 5px 10px;
-            display: flex;
-            align-items: center;
+            font-style: italic !important;
+            color: #888 !important;
+            padding: 5px 10px !important;
+            display: flex !important;
+            align-items: center !important;
         }
-        /* Hiệu ứng nhấp nháy cho "Assistant is typing..." */
         @keyframes blink {
             0% { opacity: 1; }
             50% { opacity: 0.5; }
             100% { opacity: 1; }
         }
         .typing::after {
-            content: "...";
-            animation: blink 1s infinite;
+            content: "..." !important;
+            animation: blink 1s infinite !important;
         }
-        /* Tùy chỉnh ô nhập liệu */
         [data-testid="stChatInput"] {
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 8px;
-            background-color: #fafafa;
+            border: 2px solid #ddd !important;
+            border-radius: 8px !important;
+            padding: 8px !important;
+            background-color: #fafafa !important;
         }
     </style>
     """,
@@ -123,7 +122,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):  # Thêm placeholder tùy chỉnh
+if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
