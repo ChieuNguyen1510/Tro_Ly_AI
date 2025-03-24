@@ -16,16 +16,6 @@ def img_to_base64(img_path):
 assistant_icon = img_to_base64("assistant_icon.png")
 user_icon = img_to_base64("user_icon.png")
 
-# Thêm MathJax để render LaTeX
-st.markdown(
-    """
-    <script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
-    """,
-    unsafe_allow_html=True
-)
-
 # Hiển thị logo (nếu có)
 try:
     col1, col2, col3 = st.columns([3, 2, 3])
@@ -138,22 +128,12 @@ if prompt := st.chat_input("Please enter your questions here"):
     # Xóa dòng "Assistant is typing..."
     typing_placeholder.empty()
 
-    # Xử lý response để thêm cú pháp LaTeX nếu cần
-    if "[" in response and "]" in response:
-        response = response.replace("[", "$$").replace("]", "$$")
-
-    # Hiển thị phản hồi từ assistant và buộc MathJax render lại
-    st.markdown(
-        f'''
-        <div class="message">
-            <img src="data:image/png;base64,{assistant_icon}" class="icon" />
-            <div class="text">{response}</div>
-        </div>
-        <script type="text/javascript">
-            window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
-        </script>
-        ''',
-        unsafe_allow_html=True
-    )
+    # Hiển thị phản hồi từ assistant
+    st.markdown(f'''
+    <div class="message">
+        <img src="data:image/png;base64,{assistant_icon}" class="icon" />
+        <div class="text">{response}</div>
+    </div>
+    ''', unsafe_allow_html=True)
 
     st.session_state.messages.append({"role": "assistant", "content": response})
