@@ -63,18 +63,19 @@ INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
-# Nút "New chat" tùy chỉnh (không có icon)
+# Nút "New chat" tùy chỉnh
 st.markdown(
     """
     <style>
+        /* Ẩn nút st.button mặc định */
+        div[data-testid="stButton"] > button[key="new_chat_hidden"] {
+            display: none !important;
+        }
         .new-chat-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: #4CAF50;
+            background-color: #4CAF50;  /* Màu xanh lá */
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;  /* Bo góc giống hình ảnh */
             padding: 6px 12px;
             font-size: 14px;
             cursor: pointer;
@@ -82,14 +83,14 @@ st.markdown(
             margin: 10px 0;
         }
         .new-chat-btn:hover {
-            background-color: #45a049;
+            background-color: #45a049;  /* Màu xanh đậm hơn khi hover */
         }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Sử dụng st.button để xử lý logic, nhưng ẩn nó và kích hoạt qua HTML
+# Sử dụng st.button để xử lý logic, nhưng ẩn nó
 if st.button("New chat", key="new_chat_hidden"):
     # Reset messages về trạng thái ban đầu
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
