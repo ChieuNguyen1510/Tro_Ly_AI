@@ -130,12 +130,12 @@ st.markdown(
         div.stButton > button {
             background-color: #4CAF50 !important;
             color: white !important;
-            border-radius: 8px !important;
-            padding: 8px 16px !important;
+            border-radius: 2px solid #FFFFFF !important;
+            padding: 6px 6px !important;
             font-size: 14px !important;
             border: none !important;
             display: block !important;
-            margin: 1px auto !important;  /* Căn giữa nút */
+            margin: 10px 0px !important;  /* Căn giữa nút */
         }
         div.stButton > button:hover {
             background-color: #45a049 !important;
