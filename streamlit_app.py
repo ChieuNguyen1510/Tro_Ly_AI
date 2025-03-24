@@ -12,7 +12,11 @@ def img_to_base64(img_path):
     with open(img_path, "rb") as f:
         return b64encode(f.read()).decode()
 
-# Chuyển ảnh sang base64
+# Hàm tự động sửa công thức dạng [ \ ... ] thành $ ... $
+def fix_latex(text):
+    return text.replace("[", "$").replace("]", "$")
+
+# Chuyển icon sang base64
 assistant_icon = img_to_base64("assistant_icon.png")
 user_icon = img_to_base64("user_icon.png")
 
@@ -31,7 +35,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# OpenAI API
+# Lấy OpenAI API key
 openai_api_key = st.secrets.get("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
 
@@ -65,9 +69,6 @@ st.markdown(
             height: 28px;
             border-radius: 50%;
         }
-        .text {
-            flex: 1;
-        }
         .typing {
             font-style: italic;
             color: gray;
@@ -80,33 +81,34 @@ st.markdown(
 
 # Hiển thị lịch sử tin nhắn (trừ system)
 for message in st.session_state.messages:
+    content_fixed = fix_latex(message["content"])
     if message["role"] == "assistant":
         st.markdown(f'''
         <div class="message">
             <img src="data:image/png;base64,{assistant_icon}" class="icon" />
-            <div class="text">{message["content"]}</div>
         </div>
         ''', unsafe_allow_html=True)
+        st.markdown(content_fixed, unsafe_allow_html=False)
     elif message["role"] == "user":
         st.markdown(f'''
         <div class="message user">
             <img src="data:image/png;base64,{user_icon}" class="icon" />
-            <div class="text">{message["content"]}</div>
         </div>
         ''', unsafe_allow_html=True)
+        st.markdown(content_fixed, unsafe_allow_html=False)
 
-# Ô nhập câu hỏi
+# Nhập prompt
 if prompt := st.chat_input("Please enter your questions here"):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
     <div class="message user">
         <img src="data:image/png;base64,{user_icon}" class="icon" />
-        <div class="text">{prompt}</div>
     </div>
     ''', unsafe_allow_html=True)
+    st.markdown(fix_latex(prompt), unsafe_allow_html=False)
 
-    # Assistant đang trả lời...
+    # Hiển thị typing...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
         '<div class="typing">Assistant is typing...</div>',
@@ -125,15 +127,14 @@ if prompt := st.chat_input("Please enter your questions here"):
         if chunk.choices:
             response += chunk.choices[0].delta.content or ""
 
-    # Xóa dòng "Assistant is typing..."
     typing_placeholder.empty()
 
-    # Hiển thị phản hồi từ assistant
+    # Hiển thị icon + nội dung trả lời
     st.markdown(f'''
     <div class="message">
         <img src="data:image/png;base64,{assistant_icon}" class="icon" />
-        <div class="text">{response}</div>
     </div>
     ''', unsafe_allow_html=True)
+    st.markdown(fix_latex(response), unsafe_allow_html=False)
 
     st.session_state.messages.append({"role": "assistant", "content": response})
