@@ -63,7 +63,7 @@ INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
-# Nút "New chat" tùy chỉnh với icon
+# Nút "New chat" tùy chỉnh (không có icon)
 st.markdown(
     """
     <style>
