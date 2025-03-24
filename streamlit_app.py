@@ -142,13 +142,16 @@ if prompt := st.chat_input("Please enter your questions here"):
     if "[" in response and "]" in response:
         response = response.replace("[", "$$").replace("]", "$$")
 
-    # Hiển thị phản hồi từ assistant
+    # Hiển thị phản hồi từ assistant và buộc MathJax render lại
     st.markdown(
         f'''
         <div class="message">
             <img src="data:image/png;base64,{assistant_icon}" class="icon" />
             <div class="text">{response}</div>
         </div>
+        <script type="text/javascript">
+            window.MathJax.Hub.Queue(["Typeset", window.MathJax.Hub]);
+        </script>
         ''',
         unsafe_allow_html=True
     )
