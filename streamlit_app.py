@@ -126,7 +126,7 @@ st.markdown(
             padding: 8px !important;
             background-color: #fafafa !important;
         }
-        /* Tùy chỉnh nút "Bắt đầu cuộc trò chuyện mới" */
+        /* Tùy chỉnh nút "New chat" */
         div.stButton > button {
             background-color: #4CAF50 !important;
             color: white !important;
@@ -135,7 +135,7 @@ st.markdown(
             font-size: 14px !important;
             border: none !important;
             display: block !important;
-            margin: 10px auto !important;  /* Căn giữa nút */
+            margin: 1px auto !important;  /* Căn giữa nút */
         }
         div.stButton > button:hover {
             background-color: #45a049 !important;
@@ -163,7 +163,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
+if prompt := st.chat_input("Enter your question here..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
@@ -176,7 +176,7 @@ if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
     # Assistant đang trả lời...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
-        '<div class="typing">Assistant đang trả lời</div>',
+        '<div class="typing">Assistant is typing...</div>',
         unsafe_allow_html=True
     )
 
