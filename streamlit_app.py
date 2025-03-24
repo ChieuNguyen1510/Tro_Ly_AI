@@ -63,49 +63,12 @@ INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
-# Nút "New chat" tùy chỉnh
-st.markdown(
-    """
-    <style>
-        /* Ẩn nút st.button mặc định */
-        div[data-testid="stButton"] > button[key="new_chat_hidden"] {
-            display: none !important;
-        }
-        .new-chat-btn {
-            background-color: #4CAF50;  /* Màu xanh lá */
-            color: white;
-            border: none;
-            border-radius: 8px;  /* Bo góc giống hình ảnh */
-            padding: 6px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            width: fit-content;
-            margin: 10px 0;
-        }
-        .new-chat-btn:hover {
-            background-color: #45a049;  /* Màu xanh đậm hơn khi hover */
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Sử dụng st.button để xử lý logic, nhưng ẩn nó
-if st.button("New chat", key="new_chat_hidden"):
+# Nút "Bắt đầu cuộc trò chuyện mới"
+if st.button("Bắt đầu cuộc trò chuyện mới"):
     # Reset messages về trạng thái ban đầu
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
-    # Làm mới giao diện
+    # Làm mới giao diện bằng cách rerun ứng dụng
     st.rerun()
-
-# Hiển thị nút tùy chỉnh (không có icon)
-st.markdown(
-    """
-    <button class="new-chat-btn" onclick="document.getElementById('new_chat_hidden').click()">
-        New chat
-    </button>
-    """,
-    unsafe_allow_html=True
-)
 
 # CSS cải tiến
 st.markdown(
@@ -163,6 +126,20 @@ st.markdown(
             padding: 8px !important;
             background-color: #fafafa !important;
         }
+        /* Tùy chỉnh nút "Bắt đầu cuộc trò chuyện mới" */
+        div.stButton > button {
+            background-color: #4CAF50 !important;
+            color: white !important;
+            border-radius: 8px !important;
+            padding: 8px 16px !important;
+            font-size: 14px !important;
+            border: none !important;
+            display: block !important;
+            margin: 10px auto !important;  /* Căn giữa nút */
+        }
+        div.stButton > button:hover {
+            background-color: #45a049 !important;
+        }
     </style>
     """,
     unsafe_allow_html=True
@@ -186,7 +163,7 @@ for message in st.session_state.messages:
         ''', unsafe_allow_html=True)
 
 # Ô nhập câu hỏi
-if prompt := st.chat_input("Enter your question here...."):
+if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
@@ -199,7 +176,7 @@ if prompt := st.chat_input("Enter your question here...."):
     # Assistant đang trả lời...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
-        '<div class="typing">Assistant is typing...</div>',
+        '<div class="typing">Assistant đang trả lời</div>',
         unsafe_allow_html=True
     )
 
