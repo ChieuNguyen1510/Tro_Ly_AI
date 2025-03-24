@@ -106,8 +106,11 @@ Nếu bạn gặp đường link web, hãy lấy thông tin trong web đó để
 link web1: https://ketcausoft.com/thuvien/khai-niem
 
 
+---------------------------------------------------------------------------------------------------------------------------------
+Đây là thông tin về Automation Orientation of Team 7 at KTP
 
-Overview of the Automation Orientation off Team 7 at KTP
+
+Overview of the Automation Orientation of Team 7 at KTP
 Table of Contents
 I. Overview of the Automation Orientation
  1. Developing a Shared Python Library on GitHub
