@@ -63,12 +63,55 @@ INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
-# Nút "Bắt đầu cuộc trò chuyện mới"
-if st.button("Bắt đầu cuộc trò chuyện mới"):
+# Nút "New chat" tùy chỉnh với icon
+st.markdown(
+    """
+    <style>
+        .new-chat-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            width: fit-content;
+            margin: 10px 0;
+        }
+        .new-chat-btn:hover {
+            background-color: #45a049;
+        }
+        .new-chat-icon {
+            width: 16px;
+            height: 16px;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Sử dụng st.button để xử lý logic, nhưng ẩn nó và kích hoạt qua HTML
+if st.button("New chat", key="new_chat_hidden"):
     # Reset messages về trạng thái ban đầu
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
-    # Làm mới giao diện bằng cách rerun ứng dụng
+    # Làm mới giao diện
     st.rerun()
+
+# Hiển thị nút tùy chỉnh với icon
+st.markdown(
+    """
+    <button class="new-chat-btn" onclick="document.getElementById('new_chat_hidden').click()">
+        <svg class="new-chat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm1-4c-1.1 0-2-.9-2-2V7h4v4c0 1.1-.9 2-2 2z"/>
+        </svg>
+        New chat
+    </button>
+    """,
+    unsafe_allow_html=True
+)
 
 # CSS cải tiến
 st.markdown(
@@ -126,20 +169,6 @@ st.markdown(
             padding: 8px !important;
             background-color: #fafafa !important;
         }
-        /* Tùy chỉnh nút "Bắt đầu cuộc trò chuyện mới" */
-        div.stButton > button {
-            background-color: #4CAF50 !important;
-            color: white !important;
-            border-radius: 8px !important;
-            padding: 8px 16px !important;
-            font-size: 14px !important;
-            border: none !important;
-            display: block !important;
-            margin: 10px auto !important;  /* Căn giữa nút */
-        }
-        div.stButton > button:hover {
-            background-color: #45a049 !important;
-        }
     </style>
     """,
     unsafe_allow_html=True
@@ -154,53 +183,4 @@ for message in st.session_state.messages:
             <div class="text">{message["content"]}</div>
         </div>
         ''', unsafe_allow_html=True)
-    elif message["role"] == "user":
-        st.markdown(f'''
-        <div class="message user">
-            <img src="data:image/png;base64,{user_icon}" class="icon" />
-            <div class="text">{message["content"]}</div>
-        </div>
-        ''', unsafe_allow_html=True)
-
-# Ô nhập câu hỏi
-if prompt := st.chat_input("Enter your question here..."):
-    st.session_state.messages.append({"role": "user", "content": prompt})
-
-    st.markdown(f'''
-    <div class="message user">
-        <img src="data:image/png;base64,{user_icon}" class="icon" />
-        <div class="text">{prompt}</div>
-    </div>
-    ''', unsafe_allow_html=True)
-
-    # Assistant đang trả lời...
-    typing_placeholder = st.empty()
-    typing_placeholder.markdown(
-        '<div class="typing">Assistant is typing...</div>',
-        unsafe_allow_html=True
-    )
-
-    # Gọi API
-    response = ""
-    stream = client.chat.completions.create(
-        model=rfile("module_chatgpt.txt").strip(),
-        messages=[{"role": m["role"], "content": m["content"]} for m in st.session_state.messages],
-        stream=True,
-    )
-
-    for chunk in stream:
-        if chunk.choices:
-            response += chunk.choices[0].delta.content or ""
-
-    # Xóa dòng "Assistant is typing..."
-    typing_placeholder.empty()
-
-    # Hiển thị phản hồi từ assistant
-    st.markdown(f'''
-    <div class="message assistant">
-        <img src="data:image/png;base64,{assistant_icon}" class="icon" />
-        <div class="text">{response}</div>
-    </div>
-    ''', unsafe_allow_html=True)
-
-    st.session_state.messages.append({"role": "assistant", "content": response})
+    elif
