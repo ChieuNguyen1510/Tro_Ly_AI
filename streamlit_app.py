@@ -63,6 +63,52 @@ INITIAL_ASSISTANT_MESSAGE = {"role": "assistant", "content": rfile("02.assistant
 if "messages" not in st.session_state:
     st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
 
+# Nút "New chat" tùy chỉnh với icon
+st.markdown(
+    """
+    <style>
+        .new-chat-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            width: fit-content;
+            margin: 10px 0;
+        }
+        .new-chat-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Sử dụng st.button để xử lý logic, nhưng ẩn nó và kích hoạt qua HTML
+if st.button("New chat", key="new_chat_hidden"):
+    # Reset messages về trạng thái ban đầu
+    st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
+    # Làm mới giao diện
+    st.rerun()
+
+# Hiển thị nút tùy chỉnh với icon
+st.markdown(
+    """
+    <button class="new-chat-btn" onclick="document.getElementById('new_chat_hidden').click()">
+        <svg class="new-chat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-2h2v2h-2zm1-4c-1.1 0-2-.9-2-2V7h4v4c0 1.1-.9 2-2 2z"/>
+        </svg>
+        New chat
+    </button>
+    """,
+    unsafe_allow_html=True
+)
+
 # CSS cải tiến
 st.markdown(
     """
@@ -119,20 +165,6 @@ st.markdown(
             padding: 8px !important;
             background-color: #fafafa !important;
         }
-        /* Tùy chỉnh nút "New chat" */
-        .new-chat-btn {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 14px;
-            cursor: pointer;
-            width: fit-content;
-        }
-        .new-chat-btn:hover {
-            background-color: #45a049;
-        }
     </style>
     """,
     unsafe_allow_html=True
@@ -155,34 +187,8 @@ for message in st.session_state.messages:
         </div>
         ''', unsafe_allow_html=True)
 
-# Tạo layout với 2 cột: ô nhập liệu bên trái, nút "New chat" bên phải
-col_input, col_button = st.columns([4, 1])  # Tỷ lệ 4:1 để ô nhập liệu rộng hơn
-
 # Ô nhập câu hỏi
-with col_input:
-    prompt = st.chat_input("Nhập câu hỏi của bạn tại đây...")
-
-# Nút "New chat"
-with col_button:
-    # Sử dụng st.button để xử lý logic, nhưng ẩn nó và kích hoạt qua HTML
-    if st.button("New chat", key="new_chat_hidden"):
-        # Reset messages về trạng thái ban đầu
-        st.session_state.messages = [INITIAL_SYSTEM_MESSAGE, INITIAL_ASSISTANT_MESSAGE]
-        # Làm mới giao diện
-        st.rerun()
-
-    # Hiển thị nút tùy chỉnh
-    st.markdown(
-        """
-        <button class="new-chat-btn" onclick="document.getElementById('new_chat_hidden').click()">
-            New chat
-        </button>
-        """,
-        unsafe_allow_html=True
-    )
-
-# Xử lý khi người dùng nhập câu hỏi
-if prompt:
+if prompt := st.chat_input("Nhập câu hỏi của bạn tại đây..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     st.markdown(f'''
