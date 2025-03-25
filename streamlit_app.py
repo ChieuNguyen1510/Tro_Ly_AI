@@ -176,7 +176,7 @@ if prompt := st.chat_input("Enter your question here..."):
     # Assistant đang trả lời...
     typing_placeholder = st.empty()
     typing_placeholder.markdown(
-        '<div class="typing">Assistant is typing...</div>',
+        '<div class="typing">Assistant is typing..</div>',
         unsafe_allow_html=True
     )
 
