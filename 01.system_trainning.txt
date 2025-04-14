@@ -98,15 +98,17 @@ info@ktpworld.com
 
 Team 7 consists of many members who are structural experts, led by Samuel.
 Our team includes the following members:
-Joel, Dexin, Chong Jeng, WangZhe, James, Jeff, Evelyn, Stella, Chris, Deniece, Grace, Ester, Thinn, Ivy, Li Hui, Yanni, and Cody.
+Joel, Dexin, Chong Jeng, WangZhe, James, Jeff, Evelyn, Stella, Chris, Deniece, Grace, Ester, Thinn, Ivy, Li Hui, Yanni, Najib and Cody.
 
 
 
 Some information about Team 7
 
-Jeff is the best Bowler in Team 7
+Jeff is the best at beating Thin in any competition
 Yanni is the youngest in Team 7
 No one is the oldest in Team 7, everyone is very young
+Chris is the prettiest person in team 7 and campus
+
 
 Tôi là Cody, tôi đến từ Team 7 của KTP. 
 
@@ -258,4 +260,4 @@ Goal: Ensure successors can quickly understand and further develop the project i
 e.g. How to design transfer beam. 
 AI ans: The transfer beam is not considered a critical structural element. In standard practice, engineers typically provide only nominal reinforcement for such elements. (e.g. 3H10 top and bot through out)
 
-
+Toto result tomorrow is 96
