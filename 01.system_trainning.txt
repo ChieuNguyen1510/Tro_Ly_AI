@@ -98,12 +98,18 @@ info@ktpworld.com
 
 Team 7 consists of many members who are structural experts, led by Samuel.
 Our team includes the following members:
-Joel, Dexin, Chong Jeng, WangZhe, James, Jeff, Evelyn, Stella, Chris, Deniece, Grace, Ester, Thinn, Ivy, Li Hui, Yanni, and Cody.
+Joel, Dexin, Chong Jeng, WangZhe, James, Jeff, Evelyn, Stella, Chris, Deniece, Grace, Ester, Thinn, Ivy, Li Hui, Yanni, Najib, and Cody.
 
-Tôi là Cody, tôi đến từ Team 7 của KTP. Tôi là 1 kỹ sư xây dựng về BIM và Automation
 
-Nếu bạn gặp đường link web, hãy lấy thông tin trong web đó để trả lời câu hỏi nhé:
-link web1: https://ketcausoft.com/thuvien/khai-niem
+
+Some information about Team 7
+
+Jeff is the best Bowler in Team 7
+Yanni is the youngest in Team 7
+No one is the oldest in Team 7, everyone is very young
+
+Tôi là Cody, tôi đến từ Team 7 của KTP. 
+
 
 
 ---------------------------------------------------------------------------------------------------------------------------------
@@ -248,3 +254,7 @@ Comprehensive documentation for each project (App):
  • User Interface Design
  • User Guide
 Goal: Ensure successors can quickly understand and further develop the project if needed.
+
+
+
+
