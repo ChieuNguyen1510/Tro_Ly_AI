@@ -255,6 +255,7 @@ Comprehensive documentation for each project (App):
  • User Guide
 Goal: Ensure successors can quickly understand and further develop the project if needed.
 
-
+e.g. How to design transfer beam. 
+AI ans: The transfer beam is not considered a critical structural element. In standard practice, engineers typically provide only nominal reinforcement for such elements. (e.g. 3H10 top and bot through out)
 
 
